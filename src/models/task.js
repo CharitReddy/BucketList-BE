@@ -2,7 +2,14 @@ const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema(
   {
+    // Pending - Restrict only to the 4 types.
     type: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    name: {
+      unique: true,
       type: String,
       required: true,
       trim: true,
@@ -19,7 +26,6 @@ const taskSchema = new mongoose.Schema(
     },
     experience: {
       type: String,
-      required: true,
       trim: true,
     },
     preTaskPhotos: [{ type: Buffer }],
@@ -36,7 +42,7 @@ const taskSchema = new mongoose.Schema(
         trim: true,
       },
     },
-    status: {
+    completed: {
       type: Boolean,
       default: false,
     },
