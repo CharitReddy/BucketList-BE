@@ -42,6 +42,27 @@ router.post(
   }
 );
 
+router.post(
+  '/tasks/postTaskImages/:id',
+  auth,
+  upload.array('postTaskImages'),
+
+  async (req, res) => {
+    const _id = req.params.id;
+
+    try {
+      const task = await Task.findOne({ _id, owner: req.user._id });
+      req.files.forEach((file) => {
+        task.postTaskImages.push(file.buffer);
+      });
+      await task.save();
+      res.send(200);
+    } catch (error) {
+      res.send(400).send({ error: error.message });
+    }
+  }
+);
+
 router.get('/tasks/preTaskImages/:id', auth, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -51,6 +72,20 @@ router.get('/tasks/preTaskImages/:id', auth, async (req, res) => {
     }
     res.set('Content-Type', 'image/png');
     res.send(task.preTaskImages);
+  } catch (error) {
+    res.status(404).send();
+  }
+});
+
+router.get('/tasks/postTaskImages/:id', auth, async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+
+    if (!task || !task.postTaskImages) {
+      throw new Error();
+    }
+    res.set('Content-Type', 'image/png');
+    res.send(task.postTaskImages);
   } catch (error) {
     res.status(404).send();
   }
