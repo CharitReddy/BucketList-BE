@@ -28,8 +28,12 @@ const taskSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    preTaskPhotos: [{ type: Buffer }],
-    postTaskPhotos: [{ type: Buffer }],
+    rating: {
+      type: Number,
+    },
+    preTaskImages: [{ type: Buffer }],
+
+    postTaskImages: [{ type: Buffer }],
     others: {
       name: {
         type: String,
